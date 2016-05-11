@@ -15,7 +15,6 @@ app.get('/todos',function(req,res){
 	return res.json(todos);
 });
 
-
 //GET request for individual todos at URL /todos/:id
 app.get('/todos/:id',function(req,res){
 	var todoId = parseInt(req.params.id,10);
@@ -30,26 +29,35 @@ app.get('/todos/:id',function(req,res){
 	
 });
 
-
 //POST /todos
 app.post('/todos',function(req,res){
 	var body = _.pick(req.body,'description','completed');
-
-	//use _.pick to only keep description and completed
-	//update body.description with trimmer value
-
 
 	if(!_.isBoolean(body.completed)|| !_.isString(body.description)||body.description.trim().length===0){
 		return res.status(400).send();
 	}
 
-	var body = _.pick(body,'description','completed');
 	body.description = body.description.trim();
-
 	body.id = todoNextId++;
 	todos.push(body);
 	res.json(body);
 });
+
+
+//DELETE /todos/:id
+//	find the todo to be removed
+//	used without method from underscore
+
+app.delete('/todos/:id', function(req,res){
+	var todoId = parseInt(req.params.id,10);					//finding id ot be deleted
+	var matchedTodo = _.findWhere(todos,{id:todoId});			//find todo to be deletde
+	if(matchedTodo!=undefined){
+		todos=_.without(todos,matchedTodo);
+		return res.json(matchedTodo);
+	}
+	res.status(404).json({"Error":"No todo found with that id"});
+});
+
 
 app.listen(PORT,function(){
 	console.log('Express listening on port number ' + PORT+'!');
