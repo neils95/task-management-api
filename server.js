@@ -6,5 +6,5 @@ app.get('/',function(req,res){
 	res.send('Todo API Roots');
 });
 app.listen(PORT,function(){
-	console.log('Express listening on port' + PORT+'!');
+	console.log('Express listening on port number ' + PORT+'!');
 });
