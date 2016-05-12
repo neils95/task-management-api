@@ -9,10 +9,31 @@ var todoNextId=1;
 
 //express parses any request
 app.use(bodyParser.json());
-
+app.get('/',function(req,res){
+	res.send('Todo API Root');
+});
 //GET request for all todos at URL /todos----------------------------
 app.get('/todos',function(req,res){
-	return res.json(todos);
+	//returns all query parameters as an object
+	var queryParams = req.query;
+	console.log(queryParams);
+	var filteredTodos =todos;
+
+	if(queryParams.hasOwnProperty('completed')){
+		if(queryParams.completed==='true'){
+			filteredTodos =_.where(todos,{completed:true});
+			return res.json(filteredTodos);
+		}else if(queryParams.completed ==='false'){
+			filteredTodos =_.where(todos,{completed:false});
+			return res.json(filteredTodos);
+		}else{
+			return res.status(400).send();
+		}
+	}
+	//if has property && completed =='true'
+	//	filtered todos _.where(filteredTodos, {completed:true});
+	//else if has prop and completed is 'false'
+	return res.json(filteredTodos);
 });
 
 //GET request for individual todos at URL /todos/:id
@@ -43,7 +64,6 @@ app.post('/todos',function(req,res){
 	res.json(body);
 });
 
-
 //DELETE /todos/:id
 //	find the todo to be removed
 //	used without method from underscore
@@ -57,7 +77,6 @@ app.delete('/todos/:id', function(req,res){
 	}
 	res.status(404).json({"Error":"No todo found with that id"});
 });
-
 
 //PUT /todos/:id
 app.put('/todos/:id',function(req,res){
@@ -88,7 +107,6 @@ app.put('/todos/:id',function(req,res){
 	res.json(matchedTodo);
 
 });
-
 
 app.listen(PORT,function(){
 	console.log('Express listening on port number ' + PORT+'!');
