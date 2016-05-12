@@ -59,6 +59,37 @@ app.delete('/todos/:id', function(req,res){
 });
 
 
+//PUT /todos/:id
+app.put('/todos/:id',function(req,res){
+	var body = _.pick(req.body,'description','completed');				//clean object provided to include only description and completed
+
+	var todoId = parseInt(req.params.id,10);
+	var matchedTodo = _.findWhere(todos,{id:todoId});
+	if(!matchedTodo){
+		return res.status(404).json({"Error": "No todo found with that id"});
+	}
+
+	var validAttributes={};		
+
+	if(body.hasOwnProperty('completed') &&_.isBoolean(body.completed)){	//check if it has valid completed property
+		validAttributes.completed = body.completed;
+	}else if(body.hasOwnProperty('completed')){
+		return res.status(400).send();
+	}
+
+	if(body.hasOwnProperty('description') &&_.isString(body.description)&&(body.description.trim().length>0)){	//check if it has valid description property
+		validAttributes.description = body.description;
+	}else if(body.hasOwnProperty('description')){
+		return res.status(400).send();
+	}
+
+	//EXTEND _ property
+	_.extend(matchedTodo,validAttributes);
+	res.json(matchedTodo);
+
+});
+
+
 app.listen(PORT,function(){
 	console.log('Express listening on port number ' + PORT+'!');
 });
