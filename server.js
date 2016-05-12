@@ -17,7 +17,6 @@ app.get('/', function(req, res) {
 
 
 //GET request for all todos at URL /todos?completed=true&q=work
-
 app.get('/todos', function(req, res) {
 	var query = req.query;
 	var where ={};
