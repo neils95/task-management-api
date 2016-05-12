@@ -50,15 +50,24 @@ app.get('/todos', function(req, res) {
 //GET request for individual todos at URL /todos/:id
 app.get('/todos/:id', function(req, res) {
 	var todoId = parseInt(req.params.id, 10);
-
-	var matchedTodo = _.findWhere(todos, {
-		id: todoId
-	});
-	if (matchedTodo === undefined) {
-		res.status(404).send();
-	} else {
-		res.json(matchedTodo);
+	db.todo.findById(todoId).then(function(todo){
+		if(!!todo){
+		return res.status(200).json(todo.toJSON());
+	}else{
+		return res.status(404).send();
 	}
+	},function(e){
+		return res.status(404).json(e);
+	});
+
+	// var matchedTodo = _.findWhere(todos, {
+	// 	id: todoId
+	// });
+	// if (matchedTodo === undefined) {
+	// 	res.status(404).send();
+	// } else {
+	// 	res.json(matchedTodo);
+	// }
 	//if not found send error status
 
 });
@@ -75,22 +84,9 @@ app.post('/todos', function(req, res) {
 	}, function(e){
 		return res.status(404).json(e);
 	});
-
-
-	// if (!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length === 0) {
-	// 	return res.status(400).send();
-	// }
-
-	// body.description = body.description.trim();
-	// body.id = todoNextId++;
-	// todos.push(body);
-	// res.json(body);
 });
 
 //DELETE /todos/:id
-//	find the todo to be removed
-//	used without method from underscore
-
 app.delete('/todos/:id', function(req, res) {
 	var todoId = parseInt(req.params.id, 10); //finding id ot be deleted
 	var matchedTodo = _.findWhere(todos, {
