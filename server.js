@@ -19,69 +19,52 @@ app.get('/', function(req, res) {
 //GET request for all todos at URL /todos?completed=true&q=work
 
 app.get('/todos', function(req, res) {
-	var queryParams = req.query;
-	var filteredTodos = todos;
+	var query = req.query;
+	var where ={};
+	// //Filter todo tasks by completion
+	if (query.hasOwnProperty('completed')&&query.completed==='true') {
+		where.completed=true;
+	}else if(query.hasOwnProperty('completed')&&query.completed==='false'){
+		where.completed=false;
+	}
 
-	//Filter todo tasks by completion
-	if (queryParams.hasOwnProperty('completed')) {
-		if (queryParams.completed === 'true') {
-			filteredTodos = _.where(todos, {
-				completed: true
-			});
-		} else if (queryParams.completed === 'false') {
-			filteredTodos = _.where(todos, {
-				completed: false
-			});
-		} else {
-			return res.status(400).send();
+	if(query.hasOwnProperty('q') && query.q.length>0){
+		where.description ={
+			$like:'%'+query.q+'%'
 		}
 	}
 
-	//filter the todo tasks with the appropriate keyword
-	if (queryParams.hasOwnProperty('q') && (queryParams.q.length > 0)) {
-		filteredTodos = _.filter(filteredTodos, function(todo) {
-			return ((todo.description.toLowerCase()).indexOf(queryParams.q.toLowerCase()) > -1);
-		});
-	}
-
-	return res.json(filteredTodos);
+	db.todo.findAll({where:where}).then(function(todos){
+		return res.json(todos);
+	},function(e){
+		return res.status(404).json(e);
+	});
 });
 
 //GET request for individual todos at URL /todos/:id
 app.get('/todos/:id', function(req, res) {
 	var todoId = parseInt(req.params.id, 10);
-	db.todo.findById(todoId).then(function(todo){
-		if(!!todo){
-		return res.status(200).json(todo.toJSON());
-	}else{
-		return res.status(404).send();
-	}
-	},function(e){
+	db.todo.findById(todoId).then(function(todo) {
+		if (!!todo) {
+			return res.status(200).json(todo.toJSON());
+		} else {
+			return res.status(404).send();
+		}
+	}, function(e) {
 		return res.status(404).json(e);
 	});
-
-	// var matchedTodo = _.findWhere(todos, {
-	// 	id: todoId
-	// });
-	// if (matchedTodo === undefined) {
-	// 	res.status(404).send();
-	// } else {
-	// 	res.json(matchedTodo);
-	// }
-	//if not found send error status
-
 });
 
 //POST /todos
 app.post('/todos', function(req, res) {
 	var body = _.pick(req.body, 'description', 'completed');
-	body.id =todoNextId++;
-	body.description=body.description.trim();
+	body.id = todoNextId++;
+	body.description = body.description.trim();
 
 
-	db.todo.create(body).then(function(todo){
+	db.todo.create(body).then(function(todo) {
 		return res.status(200).json(todo.toJSON());
-	}, function(e){
+	}, function(e) {
 		return res.status(404).json(e);
 	});
 });
@@ -136,7 +119,7 @@ app.put('/todos/:id', function(req, res) {
 });
 
 
-db.sequelize.sync().then(function(){
+db.sequelize.sync().then(function() {
 	//start our server
 	app.listen(PORT, function() {
 		console.log('Express listening on port number ' + PORT + '!');
