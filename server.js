@@ -6,7 +6,6 @@ var db = require('./db.js'); //accessing our database
 var app = express();
 var PORT = process.env.PORT || 3000;
 var todos = [];
-var todoNextId = 1;
 
 //express parses any request
 app.use(bodyParser.json());
@@ -57,7 +56,6 @@ app.get('/todos/:id', function(req, res) {
 //POST /todos
 app.post('/todos', function(req, res) {
 	var body = _.pick(req.body, 'description', 'completed');
-	body.id = todoNextId++;
 	body.description = body.description.trim();
 
 
