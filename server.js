@@ -9,30 +9,36 @@ var todoNextId=1;
 
 //express parses any request
 app.use(bodyParser.json());
+
 app.get('/',function(req,res){
 	res.send('Todo API Root');
 });
-//GET request for all todos at URL /todos----------------------------
+
+
+//GET request for all todos at URL /todos?completed=true&q=work
+
 app.get('/todos',function(req,res){
-	//returns all query parameters as an object
 	var queryParams = req.query;
-	console.log(queryParams);
 	var filteredTodos =todos;
 
+	//Filter todo tasks by completion
 	if(queryParams.hasOwnProperty('completed')){
 		if(queryParams.completed==='true'){
 			filteredTodos =_.where(todos,{completed:true});
-			return res.json(filteredTodos);
 		}else if(queryParams.completed ==='false'){
 			filteredTodos =_.where(todos,{completed:false});
-			return res.json(filteredTodos);
 		}else{
 			return res.status(400).send();
 		}
 	}
-	//if has property && completed =='true'
-	//	filtered todos _.where(filteredTodos, {completed:true});
-	//else if has prop and completed is 'false'
+	
+	//filter the todo tasks with the appropriate keyword
+	if(queryParams.hasOwnProperty('q')&&(queryParams.q.length > 0)){
+		filteredTodos=_.filter(filteredTodos, function(todo){
+			return ((todo.description.toLowerCase()).indexOf(queryParams.q.toLowerCase())>-1);
+		});
+	}
+
 	return res.json(filteredTodos);
 });
 
