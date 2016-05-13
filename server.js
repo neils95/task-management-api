@@ -119,9 +119,7 @@ app.put('/todos/:id', function(req, res) {
 });
 
 
-db.sequelize.sync({
-	force: true
-}).then(function() {
+db.sequelize.sync().then(function() {
 	//start our server
 	app.listen(PORT, function() {
 		console.log('Express listening on port number ' + PORT + '!');
