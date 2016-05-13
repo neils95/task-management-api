@@ -76,7 +76,6 @@ app.delete('/todos/:id', function(req, res) {
 		}
 	}).then(function(rowsDeleted) {
 		if (rowsDeleted>1) {
-			todo.destroy();
 			return res.json(todo.status(204));
 		} else {
 			return res.status(404).json({
