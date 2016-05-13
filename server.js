@@ -125,7 +125,7 @@ app.post('/users',function(req,res){
 	db.user.create(body).then(function(user){
 		return res.status(200).json(user.toJSON());
 	},function(e){
-		return res.status(400).json(e.message);
+		return res.status(400).json(e.errors.message);
 	});
 
 });
