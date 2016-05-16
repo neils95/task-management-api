@@ -63,7 +63,12 @@ app.post('/todos',middleware.requireAuthentication, function(req, res) {
 
 
 	db.todo.create(body).then(function(todo) {
-		return res.status(200).json(todo.toJSON());
+		
+		req.user.addTodo(todo).then(function(){
+			return todo.reload();
+		}).then(function(todo){				//update version of todo
+			return res.status(200).json(todo.toJSON());
+		});
 	}, function(e) {
 		return res.status(404).json(e);
 	});
