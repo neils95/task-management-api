@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var _ = require('underscore');
 var db = require('./db.js'); //accessing our database
 var bcrypt =require('bcryptjs');
+var middleware =require('./middleware.js')(db);
+
 var app = express();
 var PORT = process.env.PORT || 3000;
 var todos = [];
@@ -10,13 +12,12 @@ var todos = [];
 //express parses any request
 app.use(bodyParser.json());
 
-app.get('/', function(req, res) {
+app.get('/', middleware.requireAuthentication, function(req, res) {
 	res.send('Todo API Root');
 });
 
-
 //GET request for all todos at URL /todos?completed=true&q=work
-app.get('/todos', function(req, res) {
+app.get('/todos',middleware.requireAuthentication, function(req, res) {
 	var query = req.query;
 	var where = {};
 	// //Filter todo tasks by completion
@@ -42,7 +43,7 @@ app.get('/todos', function(req, res) {
 });
 
 //GET request for individual todos at URL /todos/:id
-app.get('/todos/:id', function(req, res) {
+app.get('/todos/:id',middleware.requireAuthentication, function(req, res) {
 	var todoId = parseInt(req.params.id, 10);
 	db.todo.findById(todoId).then(function(todo) {
 		if (!!todo) {
@@ -56,7 +57,7 @@ app.get('/todos/:id', function(req, res) {
 });
 
 //POST /todos
-app.post('/todos', function(req, res) {
+app.post('/todos',middleware.requireAuthentication, function(req, res) {
 	var body = _.pick(req.body, 'description', 'completed');
 	body.description = body.description.trim();
 
@@ -69,7 +70,7 @@ app.post('/todos', function(req, res) {
 });
 
 //DELETE /todos/:id
-app.delete('/todos/:id', function(req, res) {
+app.delete('/todos/:id',middleware.requireAuthentication, function(req, res) {
 	var todoId = parseInt(req.params.id, 10); //finding id ot be deleted
 
 	db.todo.destroy({
@@ -90,7 +91,7 @@ app.delete('/todos/:id', function(req, res) {
 });
 
 //PUT /todos/:id
-app.put('/todos/:id', function(req, res) {
+app.put('/todos/:id',middleware.requireAuthentication, function(req, res) {
 	var body = _.pick(req.body, 'description', 'completed'); //clean object provided to include only description and completed
 	var todoId = parseInt(req.params.id, 10);
 	var attributes = {};
