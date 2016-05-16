@@ -49,7 +49,6 @@ app.get('/todos', middleware.requireAuthentication, function(req, res) {
 
 //GET request for individual todos at URL /todos/:id
 app.get('/todos/:id', middleware.requireAuthentication, function(req, res) {
-	//findONe by user id then find
 	var todoId = parseInt(req.params.id, 10);
 	db.todo.findOne({
 		where: {
@@ -173,7 +172,7 @@ app.post('/users/login', function(req, res) {
 	});
 });
 
-db.sequelize.sync().then(function() {
+db.sequelize.sync({force:true}).then(function() {
 	//start our server
 	app.listen(PORT, function() {
 		console.log('Express listening on port number ' + PORT + '!');
