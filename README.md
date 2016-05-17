@@ -3,7 +3,10 @@ This is a REST API for creating and updating tasks and list items. It is created
 to store users and tasks.
 
 ##Installation
+
 ``1. Download todo-api folder``
+
 ``2. In terminal, Navigate to todo-api directory``
+
 ``3. $node server.js``
 
