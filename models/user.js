@@ -32,8 +32,9 @@ module.exports =function(sequelize,DataTypes){
 
 				this.setDataValue('password',value);
 				this.setDataValue('salt',salt);
-
 				this.setDataValue('password_hash',hashedPassword);
+
+				
 			}
 		}
 	},{

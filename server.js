@@ -148,6 +148,7 @@ app.post('/users', function(req, res) {
 
 	db.user.create(body).then(function(user) {
 		return res.status(200).json(user.toPublicJSON());
+
 	}, function(e) {
 		return res.status(400).json(e.errors.message);
 	});
