@@ -13,6 +13,22 @@
   3. $node server.js
   ```
 ###3. npm dependencies ###
+  * [**Express**](http://expressjs.com/)
+    
+    Used to set up routes, respond to HTTP requests and set up custom middleware for authentication of each HTTP request.
+  
+  * [**Sequelize**](http://docs.sequelizejs.com/en/latest/)
+    
+    Used to setup, update and query remotely hosted PostgreSQL database which stores users and tasks.
+  
+  * [**cryptojs**](https://www.npmjs.com/package/crypto-js)
+    
+    Used to encrypt token for additional security.
+  
+  * [**chai and mocha**](https://mochajs.org/)
+    
+    Used to perform unit testing in a TDD approach to develop this app.
+  
 
 ###4. Endpoint reference ###
 While running on local server API root is http://localhost:3000/
