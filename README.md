@@ -2,7 +2,28 @@
 
 ###1. About the web API ###
 
+  * **Description**
+  
+    NodeJs based application which allows users to create and manage tasks linked with their password protected accounts. Currently the app allows users to signup, login, logout, update tasks and query them based on keywords and completed status. It follows the principles of REST APIs.
 
+  * **Authentication**
+  
+    Token based authentication is used. After every login request, a token is generated on server side and returned to the client. This encrypted token must be sent with every HTTP request else a 404 is returned.
+
+  * **Data Storage**
+  
+    A postgreSQL database is used when the application is deployed on a remote server. The database contains three tables for users, tasks and tokens. A task is stored in the tasks table is associate to a user using a foreign key. 
+
+  * **Hosting**
+  
+  The app is hosted on a heroku server at the following endpoint https://dashboard.heroku.com/apps/neil-todo-api
+  
+  * **Response**
+  
+  All responses are in JSON format. 
+  
+  
+  
 ###2. Installation ###
   To create a local server on [port 3000](http://localhost:3000/) 
   ```
@@ -38,7 +59,7 @@ API is currently remotely hosted on heroku server at  https://neil-todo-api.hero
 | METHOD        | ENDPOINT           | Description  |
 | ------------- | ------------- | ----- |
 | GET     | / | Root of API |
-| GET      | /todos      | Returns all tasks for signed in user  |
+| GET      | /todos?      | Returns all tasks for signed in user. Can be queried by keyword or completed status |
 | GET | /todos/:id      | Returns task at particular id   |
 |POST | /todos | Create a new task|
 |DELETE | /todos/:id | Delete task at particular id|
