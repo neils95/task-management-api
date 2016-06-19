@@ -1,11 +1,10 @@
 # Task Management REST API
 
-###Description
-
+1. ###About the web API
 This is a REST API for creating and updating tasks and list items. It is created using Node and uses SQLite(Locally) and PostgreSQL(When deployed on Heroku) databases
 to store users and tasks.
 
-##Installation
+2. ###Installation
 
 ``1. Clone todo-api repo``
 
@@ -13,10 +12,10 @@ to store users and tasks.
 
 ``3. $node server.js``
 
-##npm dependencies
+3. ###npm dependencies
 
-##Endpoint reference
+4. ###Endpoint reference
 
-##Changes pending
+5. ###Changes pending
 
 
