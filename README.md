@@ -4,7 +4,7 @@
 
   * **Description**
   
-    NodeJs based application which allows users to create and manage tasks linked with their password protected accounts. Currently the app allows users to signup, login, logout, update tasks and query them based on keywords and completed status. It follows the principles of REST APIs.
+    Node.js based application which allows users to create and manage tasks linked with their password protected accounts. Currently the app allows users to signup, login, logout, update tasks and query them based on keywords and completed status. It follows the principles of REST APIs.
 
   * **Authentication**
   
